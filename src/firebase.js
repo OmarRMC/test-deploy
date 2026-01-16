@@ -1,15 +1,15 @@
-// src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDbzOnQs0fuvcSoyskBo6X-FII9ticSng0",
-    authDomain: "hola-a9696.firebaseapp.com",
-    databaseURL: "https://hola-a9696-default-rtdb.firebaseio.com",
-    projectId: "hola-a9696",
-    storageBucket: "hola-a9696.firebasestorage.app",
-    messagingSenderId: "110663792412",
-    appId: "1:110663792412:web:dc26b18cd38a40bf742cd9"
+    apiKey: "AIzaSyAuJ6orlazSAurnuHEKLBMwAmDa-whXSXc",
+    authDomain: "realtime-database-3d9de.firebaseapp.com",
+    databaseURL: "https://realtime-database-3d9de-default-rtdb.firebaseio.com",
+    projectId: "realtime-database-3d9de",
+    storageBucket: "realtime-database-3d9de.firebasestorage.app",
+    messagingSenderId: "438207463925",
+    appId: "1:438207463925:web:e2e978fe1732e6a51e20bc",
+    measurementId: "G-H9JX0DNVSF"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -1,7 +1,7 @@
-// src/components/Poll.jsx
 import React, { useEffect, useState } from "react";
 import { ref, onValue, runTransaction } from "firebase/database";
 import { db } from "../firebase";
+import "./Poll.css";
 
 const Poll = ({ pollId }) => {
     const [poll, setPoll] = useState(null);
@@ -23,15 +23,13 @@ const Poll = ({ pollId }) => {
         const voted = JSON.parse(localStorage.getItem("votedPolls") || "{}");
         const previousVote = voted[pollId];
 
-        if (previousVote === optionKey) return; // no aumenta votos extra
+        if (previousVote === optionKey) return;
 
-        // Restar voto anterior si existía
         if (previousVote) {
             const oldVoteRef = ref(db, `polls/${pollId}/options/${previousVote}/votes`);
             runTransaction(oldVoteRef, (v) => (v || 1) - 1).catch(console.error);
         }
 
-        // Sumar nuevo voto
         const newVoteRef = ref(db, `polls/${pollId}/options/${optionKey}/votes`);
         runTransaction(newVoteRef, (v) => (v || 0) + 1)
             .then(() => {
@@ -47,26 +45,24 @@ const Poll = ({ pollId }) => {
     const totalVotes = Object.values(poll.options).reduce((sum, o) => sum + o.votes, 0) || 1;
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow mb-6">
-            <h2 className="text-xl font-semibold mb-4">{poll.question}</h2>
-            <div className="space-y-3">
+        <div className="poll-container">
+            <h2 className="poll-question">{poll.question}</h2>
+            <div className="poll-options">
                 {Object.entries(poll.options).map(([key, opt]) => {
                     const percent = Math.round((opt.votes / totalVotes) * 100);
                     const isUserChoice = userVote === key;
 
                     return (
-                        <div key={key} className="mb-3">
+                        <div key={key} className="poll-option">
                             <button
-                                className={`w-full text-left p-2 rounded-md font-medium transition-colors ${isUserChoice ? "bg-green-500 text-white" : "bg-blue-100 hover:bg-blue-200"
-                                    }`}
+                                className={`poll-button ${isUserChoice ? "selected" : ""}`}
                                 onClick={() => vote(key)}
                             >
                                 {opt.text} ({opt.votes})
                             </button>
-                            <div className="w-full bg-gray-200 rounded h-4 mt-1">
+                            <div className="poll-bar-background">
                                 <div
-                                    className={`h-4 rounded transition-all ${isUserChoice ? "bg-green-500" : "bg-blue-500"
-                                        }`}
+                                    className={`poll-bar ${isUserChoice ? "selected-bar" : ""}`}
                                     style={{ width: `${percent}%` }}
                                 ></div>
                             </div>

@@ -1,14 +1,31 @@
-// src/App.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { ref, onValue } from "firebase/database";
+import { db } from "./firebase";
 import Poll from "./components/Poll";
-
-const pollIds = ["poll1", "poll2"];
+import "./App.css";
 
 function App() {
+  const [pollIds, setPollIds] = useState([]);
+
+  useEffect(() => {
+    const pollsRef = ref(db, "polls");
+    const unsubscribe = onValue(pollsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const keys = Object.keys(data);
+        setPollIds(keys);
+      } else {
+        setPollIds([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <div className="bg-gray-100 min-h-screen p-6">
-      <h1 className="text-3xl font-bold text-center mb-8">📊 Encuesta en Tiempo Real V2</h1>
-      <div className="max-w-3xl mx-auto space-y-10">
+    <div className="app-container">
+      <h1 className="app-title">📊 Encuesta en Tiempo Real</h1>
+      <div className="polls-wrapper">
         {pollIds.map((id) => (
           <Poll key={id} pollId={id} />
         ))}
